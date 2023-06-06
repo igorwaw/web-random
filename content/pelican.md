@@ -5,8 +5,6 @@ Category: it
 Tags: it, python, website
 Slug: pelican
 
-
-
 I use static website generator called Pelican to build all my websites, unless I have a good reason not to. Why? Since laziness is one of the virtues of a good programmer, I asked ChatGPT that question. Here's a slightly edited answer:
 
 **Speed and Performance:** Static website generators offer incredible speed and performance compared to CMS. With a static website, there is no server-side processing required to generate pages, resulting in faster load times
@@ -19,6 +17,9 @@ I use static website generator called Pelican to build all my websites, unless I
 
 So there you have it, ChatGPT got right. Out of many static website generators, I chose Pelican because it's easy to use and written in Python. To be frank, I never even looked at the source code because I never had to modify or extend anything, but it's good to know that I can.
 
+## Start simple
+
+Static site generators can seem quite intimidating. You're faced with thousands of configuration options, plugins and themes. But you don't have to use all of these, definitely not from the start. My suggestion is to do some minimal configuration, add a bit of content, generate the website, repeat. For the developers: think of it as a one-person Scrum with 30 minutes sprint time.
 
 ## Installing Pelican and initializing the website
 
@@ -36,21 +37,24 @@ In the new directory, run "pelican-quickstart" and answer a few questions. Make 
 
 ## Choosing a theme
 
-Recommended way is to use git submodule to install the theme, but again I did it my way. Here's my setup:
+Have a look at <https://github.com/getpelican/pelican-themes>. At first I chose Bootstrap2, a simple theme with no dependencies. Soon I discovered I should switch to similar looking, but much more powerful Pelican-Bootrstrap3 which requires several plugins. Fine, I'll need plugins anyway. Changing a theme is simple, so don't worry that you choose wrong.
+
+Recommended way is to use git submodule to install the theme and plugins, but again I did it my way. Here's my setup:
 
 - I keep all my websites in ~/Documents/web, eg. this one is ~/Documents/web/web-random
-- In the same directory, I downloaded the themes with: git clone --recursive https://github.com/getpelican/pelican-themes ./pelican-themes
-- I chose theme *bootstrap2* for this site, I added it with a symlink:
+- In the same directory, I keep themes and plugins, in ~/Documents/web/pelican-themes and ~/Documents/web/pelican-plugins
+- I first chose theme *bootstrap2* for this site, but soon replaced it with more powerful, but also more complex *bootstrap3*
 
 ```bash
-mkdir ~/Documents/web/web-random/pelican-themes
-cd ~/Documents/web/web-random/pelican-themes
-ln -s ../../pelican-themes/bootstrap2 .
+cd ~/Documents/web
+git clone --recursive https://github.com/getpelican/pelican-themes ./pelican-themes
+git clone --recursive https://github.com/getpelican/pelican-plugins ./pelican-plugins
+cd web-random
+ln -s ../pelican-themes .
+ln -s ../pelican-plugins .
 ```
 
-- Then I just added a single line in cofiguration file: THEME = 'pelican-themes/bootstrap2'
-
-The way I did it, my websites can share the pelican-themes repository.
+Then I just added a few lines in configuration file pelicanconf.py
 
 ## Adding content
 
@@ -58,7 +62,7 @@ Every file with .rst (ReStructuredText) or .md (Markdown) extension in the direc
 
 Every article or page starts with a short metadata section. Here is an example taken from this post:
 
-```
+```yaml
 Title: How I build this site
 Date: 2023-03-27 17:30
 Status: published
@@ -71,7 +75,7 @@ Most of this is self explanatory. *Slug* is the output filename if you want to u
 
 For the non-blog site, you generally skip things like tags and category. You also have to choose one page as the default. Example from my personal site:
 
-```
+```yaml
 Title: Too Many Machines
 Date: 2023-03-27 17:30
 Status: published
@@ -86,7 +90,7 @@ Then, after at least one empty line, follows the contents. You can use all of th
 
 After adding some test content, I run two simple commands: make html && make serve
 
-```
+```bash
 igor@testvm:~/Dokumenty/web/web-random$ make html && make serve
 "pelican" "/home/igor/Dokumenty/web/web-random/content" -o "/home/igor/Dokumenty/web/web-random/output" -s "/home/igor/Dokumenty/web/web-random/pelicanconf.py" 
 [15:37:32] WARNING  Watched path does not exist: /home/igor/Dokumenty/web/web-random/content/images                                                                                               log.py:91
@@ -95,19 +99,19 @@ Done: Processed 1 article, 0 drafts, 0 hidden articles, 0 pages, 0 hidden pages 
 Serving site at: http://127.0.0.1:8000 - Tap CTRL-C to stop
                        
 ```
-So far so good. I've got the working website and it doesn't look very ugly. Articles are indexed by tags, category and date.
 
+So far so good. I've got the working website and it doesn't look very ugly. Articles are indexed by tags, category and date.
 
 ## Linking
 
 There is already an image on this page and I didn't explain how to add them. Pelican has a concept of static files - they are copied to output directory without any change. You can configure different types of static files, images are already configured by default. Simply copy the files you need into content/images and use them like this:
 
-```
+```markdown
 ![Pelican init]({static}/images/pelican-init.png)
 ```
 
 A similar syntax can be used when linking to internal content. You can specify a source file when writing your markdown and Pelican will rewrite it to link to output file. Let's test it on my [article on ChatGPT]({filename}chat-gpt.md) - the code looks like this:
 
-```
+```markdown
 [article on ChatGPT]({filename}chat-gpt.md)
 ```

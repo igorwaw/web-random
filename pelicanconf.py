@@ -32,4 +32,12 @@ DEFAULT_PAGINATION = 10
 
 #theme
 
-THEME = 'pelican-themes/bootstrap2'
+
+PLUGIN_PATHS = ['pelican-plugins']
+
+THEME = 'pelican-themes/pelican-bootstrap3'
+BOOTSTRAP_THEME = 'flatly'
+
+JINJA_ENVIRONMENT = {'extensions': ['jinja2.ext.i18n']}
+PLUGINS = ['i18n_subsites']
+I18N_TEMPLATES_LANG = 'en'
