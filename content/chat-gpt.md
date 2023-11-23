@@ -1,8 +1,8 @@
 Title: How to use ChatGPT and Github Copilot to code effectively
 Date: 2023-04-12 17:30
 Status: published
-Category: it
-Tags: it, ai
+Category: random
+Tags: ai
 Slug: chat-gpt
 
 If you're a software developer, you might be worried that generative AI will take your job. Well, worry not. Yes, ChatGPT can generate a (sometimes) working code in many programming languages, but that's the easiest part of programming. Start to worry when it learns to debug.
@@ -16,7 +16,7 @@ And before we start: yes, I know that's not such thing as AI, it's just a large 
 
 How do I connect to MongoDB? How do I parse JSON? How to read config from environment variables and command line? A large part of every application is a standard code we call boilerplate. It's an often repeated joke that junior developer's job is mostly copy-pasting code from StackOverflow. The hidden truth  is: experienced developers do the same. Or they copy-paste from their own code written in the past. And there's nothing wrong about it, computers are good at remembering, we don't need to clog our tiny human memory.
 
-Generative AI just makes the process slightly faster because you can use a conversation-like interface. The code can be personalized, eg. it would connect to your specific webservice, not some example webservice. And you can ask it to explain parameters. 
+Generative AI just makes the process slightly faster because you can use a conversation-like interface. The code can be personalized, eg. it would connect to your specific webservice, not some example webservice. And you can ask it to explain parameters.
 
 The easiest way is to use ChatGPT to generate the Lego bricks and then assemble them on your own. Let's say your task is to read some numbers from Postgres and create plots. You might do it like this:
 
@@ -29,7 +29,6 @@ then combine those blocks yourself. Note that I assumed you know what tools you 
 Github Copilot works in a similar way, but if you use an IDE plugin, it's more convenient. You can write a comment saying what you want to do, eg. "//check if file exists", or even faster, start writing the code yourself and in a second you'll see a suggestion you can accept with Tab or ignore. And just like ChatGPT, it's much better with standard tasks than with anything even slightly complex.
 
 
-
 ## 2. Dealing with errors in the generated code
 
 There is one important caveat when using AI instead of a search engine. A top-voted reply from StackOverflow is almost guaranteed to be a proper, working code. ChatGPT will sometimes give you a code that doesn't compile or even doesn't answer your question at all. And it will do so with an utmost confidence. But you can ask it to correct the errors. It will apologize and rewrite the part. It helps if you understand the code and can type "you made a mistake because this variable  is used before initialization", but even if you don't and write "I tried running your code and got this error: syntax error at line 11", ChatGPT will try to correct. Splitting your problem into smaller tasks also helps.
@@ -40,10 +39,12 @@ You can also find it's faster to fix the code yourself or even disable Copilot i
 ## 3. Iteration
 
 I'm sure you know what's iteration. But here, I don't mean writing a loop, I mean an iterative process. Sticking to the same example as before: ChatGPT is completely capable of writing a simple application like this  (but not the bigger, more realistic application though), you don't have to write a single line of code.  But don't even try describing the whole application in one go, even for this trivial example it's impossible. What you could do instead is start simple and build on top of the previous steps:
+
 - get a working DB connection first,
 - then ask GPT to get the specific data using this connection, 
 - then to use the data to create a simple plot,
 - then to add plot elements such as legend, grid etc.
+
 Remember to test every step.
 
 ## 4. Naming and versioning

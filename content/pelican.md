@@ -1,11 +1,11 @@
 Title: How I build this site
 Date: 2023-03-27 17:30
 Status: published
-Category: it
-Tags: it, python, website
+Category: random
+Tags: python, website
 Slug: pelican
 
-I use static website generator called Pelican to build all my websites, unless I have a good reason not to. Why? Since laziness is one of the virtues of a good programmer, I asked ChatGPT that question. Here's a slightly edited answer:
+I use static website generator called Pelican to build all my websites, unless I have a good reason not to. Why? Since laziness is one of the virtues of a good programmer, I asked ChatGPT why a static website generator is better then a CMS. Here's a slightly edited answer:
 
 **Speed and Performance:** Static website generators offer incredible speed and performance compared to CMS. With a static website, there is no server-side processing required to generate pages, resulting in faster load times
 
@@ -13,9 +13,13 @@ I use static website generator called Pelican to build all my websites, unless I
 
 **Cost:** Static websites are generally cheaper to host and maintain than CMS. With CMS, there are ongoing costs associated with hosting, database maintenance, and plugin/theme updates. In contrast, static websites can be hosted anywhere.
 
-**Version Control:** Static website generators are typically built with version control in mind, which allows developers to track changes, revert to previous versions, and collaborate with others on the same project. 
+**Version Control:** Static website generators are typically built with version control in mind, which allows developers to track changes, revert to previous versions, and collaborate with others on the same project.
 
 So there you have it, ChatGPT got right. Out of many static website generators, I chose Pelican because it's easy to use and written in Python. To be frank, I never even looked at the source code because I never had to modify or extend anything, but it's good to know that I can.
+
+## But I don't like the look of this website
+
+Could be, but it's not the problem of Pelican. That's because I like minimalistic designs and I'm not very good at them. You can have as much eye candy as you like.
 
 ## Start simple
 
@@ -23,9 +27,9 @@ Static site generators can seem quite intimidating. You're faced with thousands 
 
 ## Installing Pelican and initializing the website
 
-I assume you already have Python installed. On Linux, it's almost always true, every general purpose distribution comes with Python preinstalled. On Windows, you can get Python from python.org or Windows Store. Plus git, bash and many tools you take for granted if you're used to Linux from gitforwindows.org. Or you can use Anaconda on any platform if you prefer.
+I assume you already have Python installed. On Linux, it's almost always true, every general purpose distribution comes with Python preinstalled. On Windows, you can get Python from python.org or Windows Store. Or you can use Anaconda on any platform if you prefer.
 
-A recommended way to install Pelican is using venv and pip. However, I had good results on Debian and Ubuntu with an ordinary system package - a simple "sudo apt install pelican" gives me a working setup in seconds. 
+A recommended way to install Pelican is using venv and pip. However, I had good results on Debian and Ubuntu with an ordinary system package - a simple "sudo apt install pelican" gives me a working setup in seconds.
 
 Optional step: create a GitHub repository for your website. Login to GitHub, click the "New repository" button, then clone it on your computer, either with your favourite IDE or "git clone" plus the URL pasted from GitHub. Remember to add *output/* to .gitignore. 
 
@@ -43,7 +47,7 @@ Recommended way is to use git submodule to install the theme and plugins, but ag
 
 - I keep all my websites in ~/Documents/web, eg. this one is ~/Documents/web/web-random
 - In the same directory, I keep themes and plugins, in ~/Documents/web/pelican-themes and ~/Documents/web/pelican-plugins
-- I first chose theme *bootstrap2* for this site, but soon replaced it with more powerful, but also more complex *bootstrap3*
+- In each website's directory, I created symlinks to themes and plugins
 
 ```bash
 cd ~/Documents/web
@@ -54,7 +58,18 @@ ln -s ../pelican-themes .
 ln -s ../pelican-plugins .
 ```
 
-Then I just added a few lines in configuration file pelicanconf.py
+Then I just added a few lines in configuration file pelicanconf.py:
+
+```python
+PLUGIN_PATHS = ['pelican-plugins']
+
+THEME = 'pelican-themes/pelican-bootstrap3'
+BOOTSTRAP_THEME = 'flatly'
+
+JINJA_ENVIRONMENT = {'extensions': ['jinja2.ext.i18n']}
+PLUGINS = ['i18n_subsites']
+I18N_TEMPLATES_LANG = 'en'
+```
 
 ## Adding content
 
@@ -110,8 +125,8 @@ There is already an image on this page and I didn't explain how to add them. Pel
 ![Pelican init]({static}/images/pelican-init.png)
 ```
 
-A similar syntax can be used when linking to internal content. You can specify a source file when writing your markdown and Pelican will rewrite it to link to output file. Let's test it on my [article on ChatGPT]({filename}chat-gpt.md) - the code looks like this:
+A similar syntax can be used when linking to internal content. You can specify a source file when writing your markdown and Pelican will rewrite it to link to output file. Let's test it on my [post on ChatGPT]({filename}chat-gpt.md) - the code looks like this:
 
 ```markdown
-[article on ChatGPT]({filename}chat-gpt.md)
+[post on ChatGPT]({filename}chat-gpt.md)
 ```
