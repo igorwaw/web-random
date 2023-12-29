@@ -19,6 +19,7 @@ AUTHOR_FEED_RSS = None
 LINKS = (('Main', 'https://too-many-machines.com/'),
          ('Selfhosting', 'https://selfhosting.too-many-machines.com/'),
          ('Advent of Code', 'https://advent.too-many-machines.com/'),
+         ('Photography', 'https://photo.too-many-machines.com/'),         
         ('Random stuff', 'https://random.too-many-machines.com/'),)
 
 # Social widget

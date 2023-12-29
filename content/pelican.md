@@ -125,8 +125,3 @@ There is already an image on this page and I didn't explain how to add them. Pel
 ![Pelican init]({static}/images/pelican-init.png)
 ```
 
-A similar syntax can be used when linking to internal content. You can specify a source file when writing your markdown and Pelican will rewrite it to link to output file. Let's test it on my [post on ChatGPT]({filename}chat-gpt.md) - the code looks like this:
-
-```markdown
-[post on ChatGPT]({filename}chat-gpt.md)
-```

@@ -1,6 +1,6 @@
 Title: How to use ChatGPT and Github Copilot to code effectively
 Date: 2023-04-12 17:30
-Status: published
+Status: draft
 Category: random
 Tags: ai
 Slug: chat-gpt
