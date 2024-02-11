@@ -5,13 +5,13 @@ Category: random
 Tags: vm, testing
 Slug: ibm-storage-scale
 
-IBM Storage Scale (formerly __Spectrum Scale__, formerly __GPFS__) is a distributed file system often found in HPC clusters, Machine Learning platforms etc. It can scale up to unimaginable size, it can provide higher throughput than any physical drive, it allows concurrent access from many nodes in the cluster. It supports distributed locking. It has all the standard features of Unix filesystems such as quotas or ACLs. Nodes and disks can be added and removed on the fly. There's no single point of failure. It can also be accessed with S3, NFS or Hadoop compatible interface. And that's not even a full  list of features.
+IBM Storage Scale (formerly __Spectrum Scale__, formerly __GPFS__) is a distributed file system often found in HPC clusters, Machine Learning platforms etc. It can scale up to an unimaginable size, it can provide higher throughput than any physical drive, it allows concurrent access from many nodes in the cluster. It supports distributed locking. It has all the standard features of Unix filesystems such as quotas or ACLs. Nodes and disks can be added and removed on the fly. There's no single point of failure. It can also be accessed with S3, NFS or Hadoop compatible interface. And that's not even a full  list of features.
 
-Which also means it's not something you would run at home, not even a usual datacenter. Unless, of course, you need a playground for learning or testing. I felt quite uncomfortable running commands on a production system, that stored some petabytes of data and were used by thousands of people, without testing them first.
+Which also means it's not something you would run at home, not even a usual datacenter. Unless, of course, you need a playground for learning or testing. I felt quite uncomfortable running commands on a production system, that stored some petabytes of data and was used by thousands of people, without testing them first.
 
 ## Creating VMs
 
-I used Vagrant with a default provider (Virtualbox). Vagrant makes it easy to launch VMs for test environments. No need for configuration and installation, just `vagrant init name-of-your-image ; vagrant up` and you're done. That is, if default configuration works for you. If not, then a simple modification to Vagrantfile takes only a few minutes, and that's including time spent on searching the web for examples.
+I used Vagrant with a default provider (Virtualbox). Vagrant makes it easy to launch VMs for test environments. No need for configuration and installation, just `vagrant init name-of-your-image ; vagrant up` and you're done. That is, if the default configuration works for you. If not, then a simple modification to the Vagrantfile takes only a few minutes, and that's including time spent on searching the web for examples.
 
 It's getting a bit tricky if you need to test a distributed system:
 
@@ -19,7 +19,7 @@ It's getting a bit tricky if you need to test a distributed system:
 - you should probably configure a private network,
 - if you need port forwarding (eg. for SSH access), you need to use a different port for each VM.
 
-I configured one client and three servers, sr1, sr2 and sr3. Servers both have extra hard drives in addition to the standard system drive. All machines have 2GB of RAM and 2 vCPUs (except the first server which needs more power), all connect to the same private network. All use the same operating system. Spectrum Scale supports several versions of RHEL, Ubuntu and SLES, it should work with other distributions, but no guarantees, and you'll be forced to use manual installation.
+I configured one client and three servers, sr1, sr2 and sr3. Servers both have extra hard drives in addition to the standard system drive. All machines have 2GB of RAM and 2 vCPUs (except the first server which needs more power), all connect to the same private network. All use the same operating system. Spectrum Scale supports several versions of RHEL, Ubuntu and SLES, it should work with other distributions, but no guarantees, and you'd be forced to use manual installation.
 
 Here is my Vagrantfile. It's not the initial version, that's where I arrived after some experiments.
 
@@ -120,7 +120,7 @@ done
 
 ## Getting Storage Scale
 
-Storage Scale Developer Edition is available for free, but you need to register for an IBM account and accept countless license agreement. You'll get a 1.7G zip file. Put it in the directory where you have your Vagrantfile, it will be available for VMs under /vagrant. Connect to the first server with `vagrant ssh sr1`. Unzip and add executable bit to the installer: `chmod a+x Storage_Scale_Developer-5.1.9.0-x86_64-Linux-install` and run it with root privileges: `sudo ./Storage_Scale_Developer-5.1.9.0-x86_64-Linux-install`.
+Storage Scale Developer Edition is available for free, but you need to register for an IBM account and accept countless license agreements. You'll get a 1.7G zip file. Put it in the directory where you have your Vagrantfile, it will be available for VMs under /vagrant. Connect to the first server with `vagrant ssh sr1`. Unzip and add executable bit to the installer: `chmod a+x Storage_Scale_Developer-5.1.9.0-x86_64-Linux-install` and run it with root privileges: `sudo ./Storage_Scale_Developer-5.1.9.0-x86_64-Linux-install`.
 
 It will list a few installation options. First one is:
 
