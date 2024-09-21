@@ -1,12 +1,12 @@
-AUTHOR = 'Igor Wawrzyniak'
-SITENAME = 'Random Stuff - Too Many Machines'
-SITEURL = ''
+AUTHOR = "Igor Wawrzyniak"
+SITENAME = "Random Stuff - Too Many Machines"
+SITEURL = ""
 
-PATH = 'content'
+PATH = "content"
 
-TIMEZONE = 'Europe/London'
+TIMEZONE = "Europe/London"
 
-DEFAULT_LANG = 'en'
+DEFAULT_LANG = "en"
 
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = None
@@ -16,11 +16,13 @@ AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
 
 # Blogroll
-LINKS = (('Main', 'https://too-many-machines.com/'),
-         ('Selfhosting', 'https://selfhosting.too-many-machines.com/'),
-         ('Advent of Code', 'https://advent.too-many-machines.com/'),
-         ('Photography', 'https://photo.too-many-machines.com/'),         
-        ('Random stuff', 'https://random.too-many-machines.com/'),)
+LINKS = (
+    ("Main", "https://too-many-machines.com/"),
+    ("Selfhosting", "https://selfhosting.too-many-machines.com/"),
+    ("Advent of Code", "https://advent.too-many-machines.com/"),
+    ("Photography", "https://photo.too-many-machines.com/"),
+    ("Random stuff", "https://random.too-many-machines.com/"),
+)
 
 # Social widget
 # SOCIAL = (('You can add links in your config file', '#'),
@@ -29,16 +31,16 @@ LINKS = (('Main', 'https://too-many-machines.com/'),
 DEFAULT_PAGINATION = 10
 
 # Uncomment following line if you want document-relative URLs when developing
-#RELATIVE_URLS = True
+# RELATIVE_URLS = True
 
-#theme
+# theme
 
 
-PLUGIN_PATHS = ['pelican-plugins']
+PLUGIN_PATHS = ["pelican-plugins"]
 
-THEME = 'pelican-themes/pelican-bootstrap3'
-BOOTSTRAP_THEME = 'flatly'
+THEME = "pelican-themes/pelican-bootstrap3"
+BOOTSTRAP_THEME = "flatly"
 
-JINJA_ENVIRONMENT = {'extensions': ['jinja2.ext.i18n']}
-PLUGINS = ['i18n_subsites']
-I18N_TEMPLATES_LANG = 'en'
+JINJA_ENVIRONMENT = {"extensions": ["jinja2.ext.i18n"]}
+PLUGINS = ["i18n_subsites"]
+I18N_TEMPLATES_LANG = "en"

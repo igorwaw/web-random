@@ -131,3 +131,4 @@ dmypy.json
 #custom
 output/
 content/gpfs.sh
+.vscode/
