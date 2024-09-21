@@ -1,6 +1,6 @@
 Title: Compiling Linux kernel for fun and profit
 Date: 2024-05-17 19:00
-Status: published
+Status: draft
 Category: random
 Tags: testing, linux
 Slug: compiling-linux-kernel

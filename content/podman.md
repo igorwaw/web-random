@@ -1,13 +1,13 @@
 Title: Switching from Docker to Podman
-Date: 2024-03-10 19:00
-Status: draft
+Date: 2024-09-21 16:00
+Status: published
 Category: random
 Tags: linux
 Slug: from-docker-to-podman
 
 Many distributions have switched from Docker to other container engines. There were different reasons for it - licensing or design choices - but for years I ignored the trend. I thought: container engines are supposedly 99% compatible with Docker, after all they all claim to support OCI standard, but somehow I alway run into this 1% of incompatibility. So I just always installed Docker to avoid the issues.
 
-Recently my manager encouraged me to give it another try - to spend a few hours learning about the differences before I decide that something doesn't work with Podman. I quickly discovered things that are obvious to any Podman user: while the command line tool is compatible and you can do "alias docker=podman", there are some deeper differences. Once you learn them, you can do all the same things as with Docker, plus some more.
+Few months ago the principal engineer at my workplace, who's a big fan of Podman, encouraged me to give it another try - to spend a few hours learning about the differences before I decide that something doesn't work with Podman. I quickly discovered things that are obvious to any Podman user: while the command line tool is compatible and you can do "alias docker=podman", there are some deeper differences. Once you learn them, you can do all the same things as with Docker, plus some more.
 
 Short version: whenever there's a choice between convenience and security, Docker defaults to convenience and Podman to security.
 
@@ -32,7 +32,7 @@ There are also other ways to connect the containers, you're not forced to use po
 The biggest difference between Docker and Podman. By default, Docker runs as root. Even if you run docker command as a user, it talks with the daemon that runs as root - and so the containers are started as root. Podman, on the other hand, really runs with the privilges of the user who invoked it. This has some serious implications:
 
 - The good: Podman is much more secure by design. If Docker fails to properly isolate the container (and there were such vulnerabilities in the past), the container can get full root rights to the host system and other containers. With Podman, the worst case scenario is getting access to one user account.
-- The bad: some containers need more than 1 user id. Podman can provide a full set of 2^16 ids using subids. No big deal, but: you have to have proper configuration in /etc/subuid and /etc/subgid - with modern distro and standard way of creating accounts you usually do, if you do something uncommon you might have to manually edit the file. And if your containers bind mount directories from the host filesystem, you may run into permission problems. Again, quite easily fixable with "podman unshare chown" or ":U" option for the volume, but more than one person ran into this and decided that Podman doesn't work.
+- The bad: some containers need more than 1 user id. Podman can provide a full set of 2^16 ids using subids. No big deal, but: you have to have a proper configuration in /etc/subuid and /etc/subgid - with any modern distro and the standard way of creating accounts, you usually do, if you do something uncommon you might have to manually edit the file. And if your containers bind mount directories from the host filesystem, you may run into permission problems. Again, quite easily fixable with "podman unshare chown" or ":U" option for the volume, but more than one person ran into this and decided that Podman doesn't work.
 - The ugly: some, but very few containers, really need extra privileges. If that is the case, you know what you're doing and you're accepting security implications, you can simply run podman as root. You're opting out of extra isolation, but at least it's for the selected few containers, not all of them. Even better, you can fine-tune the security options by adding and removing capabilities and seccomp filters, it's not only the choice between full root access and nothing.
 
 ## Daemonless
