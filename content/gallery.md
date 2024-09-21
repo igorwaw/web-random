@@ -10,7 +10,7 @@ Some time ago I switched from dynamic Content Management Systems such as Wordpre
 I quickly discovered that Pelican is not up to the task. I saw the limitations of this software already, mainly:
 
 - the community is small, which means not much choice of themes and plugins (and possibly long time without updates), inadequate documentation
-- it's hard to customize a theme (unless you're ready to fork it into a new team).
+- it's hard to customize a theme (unless you're ready to fork it into a new theme).
 
 So I decided to give a chance to another static generator, Hugo. I considered it before, I chose Pelican because it was written in Python (but I never touched the source code, so it's irrelevant) and I perceived it to be simpler to use (maybe, not sure about it now). And I'm satisfied with the experiment. I'm going to build my future websites with Hugo, probably one day I'll convert my existing sites too.
 
@@ -85,15 +85,13 @@ That's it, all my index pages look like this. Now I can type "hugo server" and c
 
 ![Hugo gallery]({static}/images/g1-gallery.png)
 
-
-
 ## Creating the map
 
 Instead of a list, I wanted to have a zoomable, clickable map on the main page. Front end development is not my specialty, I didn't even know what software to use, so I asked ChatGPT. It told me to use Mapael library and generated HTML and Javascript for me. The code was almost correct (imports didn't work and the HTML was missing one important div) but it was easy to fix. Now I needed to replace just one page in my generated website with my custom HTML. I had to learn a bit more then I intended about the way Hugo templates work, but it wasn't so bad and might come useful in future.
 
 ![ChatGPT advising to use Mapael]({static}/images/g2-gpt.png)
 
-First thing to understand, all files from /themes/gallery/layouts can be overriden by files in /layouts - no need to replace the whole team. Second, the main page by default uses the standard template for branch page. But, if a template for "home page" is present, it takes precedence. So, I created file /layouts/home.html.html (yes, double extension) and for the first attempt, I just put my crude HTML in there. It worked! Now, two things left to do: improve my map (set proper initial zoom, colours, add links to countries) and replace the manualy created page with a proper template. The goal was to add extra imports in the head section (for mapael JavaScript files) and replace standard gallery list with my map, but keep the rest (menu, footer, CSS) for the consistent look.
+First thing to understand, all files from /themes/gallery/layouts can be overriden by files in /layouts - no need to replace the whole theme. Second, the main page by default uses the standard template for branch page. But, if a template for "home page" is present, it takes precedence. So, I created file /layouts/home.html.html (yes, double extension) and for the first attempt, I just put my crude HTML in there. It worked! Now, two things left to do: improve my map (set proper initial zoom, colours, add links to countries) and replace the manualy created page with a proper template. The goal was to add extra imports in the head section (for mapael JavaScript files) and replace standard gallery list with my map, but keep the rest (menu, footer, CSS) for the consistent look.
 
 I ended up creating several more files (everything's on my GitHub):
 
