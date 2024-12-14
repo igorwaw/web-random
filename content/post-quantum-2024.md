@@ -46,12 +46,12 @@ I found it pecular that server-side lags behind client-side in security standard
 So where do we stand now, in December 2024?
 
 - OpenSSL, the library responsible for something like 50% of the TLS support [citation needed], has a policy of only supporting official standards. They are now working on adding FIPS203, but current versions are missing it. However, OpenSSL can be extended with "providers" - external libriaries that add additional crypto algorithms.
-- Go, probably the second most common technology in the server world, has it's own crypto libraries and you guessed it: official versions don't support Kyber.
+- Go language, probably the second most common technology in the server world, has it's own crypto libraries and you guessed it: official versions don't support Kyber.
 - OpenSSH supports FIPS203, but only in the latest version 9.9, released in September 2024. It is, of course, too new to be included in mainstream Linux distros (Kali is a notable exception, though I'm stretching the definition of mainstream).
 
 ## Cloudflare to the rescue
 
-Cloudflare is one of the early adopters. The company provides many services, including TSL termination. Incidentally, I use it for my photo gallery. Nice to know that my completely insignificant website that only contains 100% public information is well protected against state-level adversaries of the future! The also publish [stats and articles about the topic](https://blog.cloudflare.com/tag/post-quantum/).
+Cloudflare is one of the early adopters. The company provides many services, including TLS termination. Incidentally, I use it for my photo gallery. Nice to know that my completely insignificant website that only contains 100% public information is well protected against state-level adversaries of the future! The also publish [stats and articles about the topic](https://blog.cloudflare.com/tag/post-quantum/).
 
 ## Open Quantum Safe
 
@@ -59,11 +59,11 @@ Open Quantum Safe or OQS is a research project of the Linux Foundation. One of t
 
 I checked a few recent Linux distro and none had a liboqs package. Why, if it's free, opensource, and comes from a reputable source? One of the reasons might be, ironically, security. The goal of the project is to help with research and software testing, it's not intended for production use. The library contains numerous algorithms, not only the official ones or top contenders, but also those that aren't well tested, or even those that were rejected. Which means a large attack surface. In fact, there are known security vulnerabilities in liboqs. If you want to help with testing, then go ahead. If you want to have a full-featured client, be careful. But if you want to protect your server - don't do it, you will be introducing more vulnerabilities than you're fixing.
 
-## How to test common software
+## How to check common software for post-quantum support
 
 - Browser: go to [Cloudflare Research Post-Quantum](https://pq.cloudflareresearch.com/)
 - SSH client: type `ssh -Q kex` and look for a line starting with mlkem
-- SSH software: connect with `-vv` option and check "peer server KEXINIT proposal" (as a bonus "local client KEXINIT proposal" will show what your client supports). Alternatively, `nmap --script ssh2-enum-algos -sV -p 22 your.ssh.host`. In any case, look for mlkem.
+- SSH server: connect with `-vv` option and check "peer server KEXINIT proposal" (as a bonus "local client KEXINIT proposal" will show what your client supports). Alternatively, `nmap --script ssh2-enum-algos -sV -p 22 your.ssh.host`. In any case, look for mlkem.
 - OpenSSL: `openssl list -kem-algorithms` and look for mlkem or kyber.
 
 ![SSH client supporting FIPS203 (mlkem)]({static}/images/pqc-ssh.png)
