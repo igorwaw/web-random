@@ -5,9 +5,9 @@ Category: random
 Tags: it, cloud
 Slug: git-encrypt
 
-I accidentaly posted on GitHub some files I shouldn't. Not password files or access tokens, just my input files from Advent of Code. I thought it doesn't matter since the files are generated for each player, but AoC author asks to keep them confidential.
+I accidentaly posted on GitHub some files I shouldn't: my input files from Advent of Code. I thought it doesn't matter since the files are generated for each player, but AoC author specifically prohibits this.
 
-I don't think it's a big deal: the files weren't very confidential and few people visit my GitHub anyway, but let's solve it. I might need that skill one day for a more serious problem.
+I don't think it's a big deal: few people visit my GitHub anyway. But let's solve it. I might need that skill one day for a more serious problem.
 
 This is a two part problem:
 
