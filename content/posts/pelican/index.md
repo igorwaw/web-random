@@ -7,7 +7,7 @@ tags:
   - website
 ---
 
-I use static website generator called Pelican to build all my websites, unless I have a good reason not to. Why? Since laziness is one of the virtues of a good programmer, I asked ChatGPT why a static website generator is better then a CMS. Here's a slightly edited answer:
+I use static website generator called Pelican to build all my websites, unless I have a good reason not to. Why? Since laziness is one of the virtues of a good programmer, I asked ChatGPT why a static website generator is better than a CMS. Here's a slightly edited answer:
 
 **Speed and Performance:** Static website generators offer incredible speed and performance compared to CMS. With a static website, there is no server-side processing required to generate pages, resulting in faster load times
 
@@ -35,7 +35,7 @@ A recommended way to install Pelican is using venv and pip. However, I had good 
 
 Optional step: create a GitHub repository for your website. Login to GitHub, click the "New repository" button, then clone it on your computer, either with your favourite IDE or "git clone" plus the URL pasted from GitHub. Remember to add *output/* to .gitignore. 
 
-If you don't want to use GitHub, simply make a directory and enter it. You can alway create a repo later if you change your mind.
+If you don't want to use GitHub, simply make a directory and enter it. You can always create a repo later if you change your mind.
 
 In the new directory, run "pelican-quickstart" and answer a few questions. Make sure to change the title, author, URL prefix, and timezone. I chose not to automatically upload the site, I wanted to test it locally first.
 
@@ -43,7 +43,7 @@ In the new directory, run "pelican-quickstart" and answer a few questions. Make 
 
 ## Choosing a theme
 
-Have a look at <https://github.com/getpelican/pelican-themes>. At first I chose Bootstrap2, a simple theme with no dependencies. Soon I discovered I should switch to similar looking, but much more powerful Pelican-Bootrstrap3 which requires several plugins. Fine, I'll need plugins anyway. Changing a theme is simple, so don't worry that you choose wrong.
+Have a look at <https://github.com/getpelican/pelican-themes>. At first I chose Bootstrap2, a simple theme with no dependencies. Soon I discovered I should switch to similar looking, but much more powerful Pelican-Bootstrap3 which requires several plugins. Fine, I'll need plugins anyway. Changing a theme is simple, so don't worry that you choose wrong.
 
 Recommended way is to use git submodule to install the theme and plugins, but again I did it my way. Here's my setup:
 
@@ -101,7 +101,7 @@ URL:
 save_as: index.html
 ```
 
-Then, after at least one empty line, follows the contents. You can use all of the standard Markdown syntax plus many extensions eg. from Github, such as syntax highlighting.
+Then, after at least one empty line, follows the contents. You can use all of the standard Markdown syntax plus many extensions eg. from GitHub, such as syntax highlighting.
 
 ## Previewing the site
 

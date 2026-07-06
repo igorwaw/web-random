@@ -7,7 +7,7 @@ tags:
   - testing
 ---
 
-IBM Storage Scale (formerly __Spectrum Scale__, formerly __GPFS__) is a distributed file system often found in HPC clusters, Machine Learning platforms etc. It can scale up to an unimaginable size, it can provide higher throughput than any physical drive, it allows concurrent access from many nodes in the cluster. It supports distributed locking. It has all the standard features of Unix filesystems such as quotas or ACLs. Nodes and disks can be added and removed on the fly. There's no single point of failure. It can also be accessed with S3, NFS or Hadoop compatible interface. And that's not even a full  list of features.
+IBM Storage Scale (formerly __Spectrum Scale__, formerly __GPFS__) is a distributed file system often found in HPC clusters, Machine Learning platforms etc. It can scale up to an unimaginable size, it can provide higher throughput than any physical drive, it allows concurrent access from many nodes in the cluster. It supports distributed locking. It has all the standard features of Unix filesystems such as quotas or ACLs. Nodes and disks can be added and removed on the fly. There's no single point of failure. It can also be accessed with S3, NFS or Hadoop compatible interface. And that's not even a full list of features.
 
 Which also means it's not something you would run at home, not even a usual datacenter. Unless, of course, you need a playground for learning or testing. I felt quite uncomfortable running commands on a production system, that stored some petabytes of data and was used by thousands of people, without testing them first.
 
@@ -100,11 +100,11 @@ Vagrant.configure("2") do |config|
 end
 ```
 
-Vagrantfile references another file, boot-tasks.sh, which needs to be in the same directory. You can remove this line from Vagranfile for now, we'll use it in a few minutes. Run the first VM with `vagrant up sr1`. We'll use it as the installer machine. Other VMs can be started later.
+Vagrantfile references another file, boot-tasks.sh, which needs to be in the same directory. You can remove this line from Vagrantfile for now, we'll use it in a few minutes. Run the first VM with `vagrant up sr1`. We'll use it as the installer machine. Other VMs can be started later.
 
 ## Preventing installation errors
 
-If you're running the VMs on your own computer, you might be tempted to give them less resources. Unfortunately, GPFS is a memory hog. Just the main daemon gpfsd consumes 1.2GB of RAM at startup. You need at least 2GB of RAM on all nodes, I also recommend to assign 4GB to one the nodes and use it for running GUI and installer. That means that for 3 servers and client you need at least 10GB - a bit tough if your computer only has 16GB. But if your nodes don't have enough memory, daemons will fail to start or crash, what's worse, they might not even show any meaningful error message.
+If you're running the VMs on your own computer, you might be tempted to give them less resources. Unfortunately, GPFS is a memory hog. Just the main daemon gpfsd consumes 1.2GB of RAM at startup. You need at least 2GB of RAM on all nodes, I also recommend to assign 4GB to one of the nodes and use it for running GUI and installer. That means that for 3 servers and client you need at least 10GB - a bit tough if your computer only has 16GB. But if your nodes don't have enough memory, daemons will fail to start or crash, what's worse, they might not even show any meaningful error message.
 
 I also had problems, quite ironically, with storage performance. I'm running several VMs out of one hard drive (not even SSD). Linux block layer by default timeouts if it can't finish a disk operation in 30 seconds. A reasonable value for a physical system, but if several VMs are doing write-heavy operations, it might not be enough. I'd rather wait a bit more than risk data corruption. I prepared a script `time.sh` and put it in the same directory as Vagrantfile. I configured Vagrant to run it automatically while rebuilding the VMs, I can also run it manually if I need to change the value.
 
@@ -160,7 +160,7 @@ cp /etc/hosts /vagrant
 cp ~vagrant/.ssh/id_rsa* /vagrant
 ```
 
-Next, we'll add a script to so Vagrant will automatically configure all VMs. It will set the ssh keys, install required packages, and remove unattended-upgrades (this deamon has a habit of getting in the way of package installation). In the same directory where you placed Vagrantfile, add file boot-tasks.sh with the following contents:
+Next, we'll add a script so Vagrant will automatically configure all VMs. It will set the ssh keys, install required packages, and remove unattended-upgrades (this daemon has a habit of getting in the way of package installation). In the same directory where you placed Vagrantfile, add file boot-tasks.sh with the following contents:
 
 ```bash
 #!/bin/sh

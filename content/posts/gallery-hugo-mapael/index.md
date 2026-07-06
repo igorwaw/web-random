@@ -11,13 +11,13 @@ Some time ago I switched from dynamic Content Management Systems such as Wordpre
 I quickly discovered that Pelican is not up to the task. I saw the limitations of this software already, mainly:
 
 - the community is small, which means not much choice of themes and plugins (and possibly long time without updates), inadequate documentation
-- it's hard to customize a theme (unless you're ready to fork it into a new theme).
+- it's hard to customise a theme (unless you're ready to fork it into a new theme).
 
 So I decided to give a chance to another static generator, Hugo. I considered it before, I chose Pelican because it was written in Python (but I never touched the source code, so it's irrelevant) and I perceived it to be simpler to use (maybe, not sure about it now). And I'm satisfied with the experiment. I'm going to build my future websites with Hugo, probably one day I'll convert my existing sites too.
 
 ## Getting started with Hugo gallery
 
-Installing Hugo on Debian is as simple as "apt install hugo". You can also download the binary from the project's website and place it somewhere in your path. I then looked at available themes (and chose one aptly named "Gallery"), created a repo on Github and initialized the site with:
+Installing Hugo on Debian is as simple as "apt install hugo". You can also download the binary from the project's website and place it somewhere in your path. I then looked at available themes (and chose one aptly named "Gallery"), created a repo on GitHub and initialized the site with:
 
 ```bash
 hugo new site web-gallery --force # force required because the directory was not empty - it contained git files
@@ -67,7 +67,7 @@ timeZone = "Europe/London"
 
 ## Adding content
 
-Photos go into subdirectories of "content". I created directories for countries (Poland, UK, Ireland, Belgium...) than for cities or regions (Poland/Wroclaw, Poland/Bieszczady). Unless I only have few photos from the country and don't plan to add more soon, in which case I stopped at the country level. But, Hugo will ignore directories until I add an index file (which could be useful - I can add some photos, but if I'm not ready, just skip creating the index file).
+Photos go into subdirectories of "content". I created directories for countries (Poland, UK, Ireland, Belgium...) then for cities or regions (Poland/Wroclaw, Poland/Bieszczady). Unless I only have few photos from the country and don't plan to add more soon, in which case I stopped at the country level. But, Hugo will ignore directories until I add an index file (which could be useful - I can add some photos, but if I'm not ready, just skip creating the index file).
 
 There are two types of pages in Hugo, branch and leaf. Leaf is the end node - a post or article on a normal website, a gallery in this case. Branch contains a list of posts/articles/galleries. They use different template files, but from the user perspective the most important thing to remember is: for branch you need to create _index.md file, for leaf it's index.md without an underscore.
 
@@ -88,11 +88,11 @@ That's it, all my index pages look like this. Now I can type "hugo server" and c
 
 ## Creating the map
 
-Instead of a list, I wanted to have a zoomable, clickable map on the main page. Front end development is not my specialty, I didn't even know what software to use, so I asked ChatGPT. It told me to use Mapael library and generated HTML and Javascript for me. The code was almost correct (imports didn't work and the HTML was missing one important div) but it was easy to fix. Now I needed to replace just one page in my generated website with my custom HTML. I had to learn a bit more then I intended about the way Hugo templates work, but it wasn't so bad and might come useful in future.
+Instead of a list, I wanted to have a zoomable, clickable map on the main page. Front end development is not my speciality, I didn't even know what software to use, so I asked ChatGPT. It told me to use Mapael library and generated HTML and JavaScript for me. The code was almost correct (imports didn't work and the HTML was missing one important div) but it was easy to fix. Now I needed to replace just one page in my generated website with my custom HTML. I had to learn a bit more than I intended about the way Hugo templates work, but it wasn't so bad and might come useful in future.
 
 ![ChatGPT advising to use Mapael](g2-gpt.png)
 
-First thing to understand, all files from /themes/gallery/layouts can be overriden by files in /layouts - no need to replace the whole theme. Second, the main page by default uses the standard template for branch page. But, if a template for "home page" is present, it takes precedence. So, I created file /layouts/home.html.html (yes, double extension) and for the first attempt, I just put my crude HTML in there. It worked! Now, two things left to do: improve my map (set proper initial zoom, colours, add links to countries) and replace the manualy created page with a proper template. The goal was to add extra imports in the head section (for mapael JavaScript files) and replace standard gallery list with my map, but keep the rest (menu, footer, CSS) for the consistent look.
+First thing to understand, all files from /themes/gallery/layouts can be overridden by files in /layouts - no need to replace the whole theme. Second, the main page by default uses the standard template for branch page. But, if a template for "home page" is present, it takes precedence. So, I created file /layouts/home.html.html (yes, double extension) and for the first attempt, I just put my crude HTML in there. It worked! Now, two things left to do: improve my map (set proper initial zoom, colours, add links to countries) and replace the manually created page with a proper template. The goal was to add extra imports in the head section (for mapael JavaScript files) and replace standard gallery list with my map, but keep the rest (menu, footer, CSS) for the consistent look.
 
 I ended up creating several more files (everything's on my GitHub):
 
