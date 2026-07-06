@@ -1,9 +1,10 @@
-Title: Creating a photo gallery with Hugo and Mapael
-Date: 2023-12-29 17:30
-Status: published
-Category: random
-Tags: website
-Slug: gallery-hugo-mapael
+---
+title: "Creating a photo gallery with Hugo and Mapael"
+date: 2023-12-29T17:30:00
+draft: false
+tags:
+  - website
+---
 
 Some time ago I switched from dynamic Content Management Systems such as Wordpress to Pelican, a static website generator. Now I wanted to generate a photo gallery. I used to have one years ago but it's no longer available. Of course I post to social media, but I wanted a more permanent place. I also used to post my photos on TrekEarth, but this site is no more. I missed it, so I thought about publishing my travel photos first and having a map interface.
 
@@ -83,13 +84,13 @@ description: In 2005, when I lived in Dublin, I made a weekend trip to Belfast. 
 
 That's it, all my index pages look like this. Now I can type "hugo server" and click the local URL to test.
 
-![Hugo gallery]({static}/images/g1-gallery.png)
+![Hugo gallery](g1-gallery.png)
 
 ## Creating the map
 
 Instead of a list, I wanted to have a zoomable, clickable map on the main page. Front end development is not my specialty, I didn't even know what software to use, so I asked ChatGPT. It told me to use Mapael library and generated HTML and Javascript for me. The code was almost correct (imports didn't work and the HTML was missing one important div) but it was easy to fix. Now I needed to replace just one page in my generated website with my custom HTML. I had to learn a bit more then I intended about the way Hugo templates work, but it wasn't so bad and might come useful in future.
 
-![ChatGPT advising to use Mapael]({static}/images/g2-gpt.png)
+![ChatGPT advising to use Mapael](g2-gpt.png)
 
 First thing to understand, all files from /themes/gallery/layouts can be overriden by files in /layouts - no need to replace the whole theme. Second, the main page by default uses the standard template for branch page. But, if a template for "home page" is present, it takes precedence. So, I created file /layouts/home.html.html (yes, double extension) and for the first attempt, I just put my crude HTML in there. It worked! Now, two things left to do: improve my map (set proper initial zoom, colours, add links to countries) and replace the manualy created page with a proper template. The goal was to add extra imports in the head section (for mapael JavaScript files) and replace standard gallery list with my map, but keep the rest (menu, footer, CSS) for the consistent look.
 
@@ -102,7 +103,7 @@ I ended up creating several more files (everything's on my GitHub):
 
 In the end, I got a world map that's zoomed on Europe (if I travel somewhere further, I'll just have to zoom out), that automatically adjusts to the screen size, the countries with galleries are clickable and marked by a different colour than the rest.
 
-![Map generated with Mapael]({static}/images/g3-map.png)
+![Map generated with Mapael](g3-map.png)
 
 ## Publishing the website
 
@@ -128,10 +129,10 @@ DNS change might take some time to propagate (minutes, hours, depending how you 
 - and they don't point to the address I provided, they point to one of Cloudflare servers,
 - which will proxy the connection and connect to my VPS on IPv6 while serving clients on both protocols.
 
-![Cloudflare proxy setup]({static}/images/g4-proxy.png)
+![Cloudflare proxy setup](g4-proxy.png)
 
 ## Adding HTTPS
 
 I could configure my Nginx to support TLS and get a free certificate from LetsEncrypt. But, my whole traffic is going through Cloudflare which can do TLS termination. Actually, it gets a LetsEncrypt certificate by default and the website is already available with HTTP and HTTPS! Only thing left to do is to turn on the option to "Always use HTTPS", so everyone trying to access a non-encrypted version is redirected.
 
-![Cloudflare HTTPS setup]({static}/images/g5-tls.png)
+![Cloudflare HTTPS setup](g5-tls.png)

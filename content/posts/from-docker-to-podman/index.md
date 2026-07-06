@@ -1,9 +1,10 @@
-Title: Switching from Docker to Podman
-Date: 2024-09-21 16:00
-Status: published
-Category: random
-Tags: linux
-Slug: from-docker-to-podman
+---
+title: "Switching from Docker to Podman"
+date: 2024-09-21T16:00:00
+draft: false
+tags:
+  - linux
+---
 
 Many distributions have switched from Docker to other container engines. There were different reasons for it - licensing or design choices - but for years I ignored the trend. I thought: container engines are supposedly 99% compatible with Docker, after all they all claim to support OCI standard, but somehow I alway run into this 1% of incompatibility. So I just always installed Docker to avoid the issues.
 

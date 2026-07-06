@@ -1,9 +1,11 @@
-Title: Running IBM Storage Scale on VMs
-Date: 2023-11-23 19:00
-Status: published
-Category: random
-Tags: vm, testing
-Slug: ibm-storage-scale
+---
+title: "Running IBM Storage Scale on VMs"
+date: 2023-11-23T19:00:00
+draft: false
+tags:
+  - vm
+  - testing
+---
 
 IBM Storage Scale (formerly __Spectrum Scale__, formerly __GPFS__) is a distributed file system often found in HPC clusters, Machine Learning platforms etc. It can scale up to an unimaginable size, it can provide higher throughput than any physical drive, it allows concurrent access from many nodes in the cluster. It supports distributed locking. It has all the standard features of Unix filesystems such as quotas or ACLs. Nodes and disks can be added and removed on the fly. There's no single point of failure. It can also be accessed with S3, NFS or Hadoop compatible interface. And that's not even a full  list of features.
 
@@ -214,7 +216,7 @@ Now, check the filesystem configuration:
 ./spectrumscale filesystem list
 ```
 
-![Filesystem configuration]({static}/images/gpfs-fs.png)
+![Filesystem configuration](gpfs-fs.png)
 
 
 Last thing to configure. By default, Spectrum Scale will send information to IBM, but this function is not configured. We need to either provide information about the customer, country etc. or simply turn it off with  `./spectrumscale callhome disable`.

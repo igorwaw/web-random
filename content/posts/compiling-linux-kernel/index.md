@@ -1,9 +1,11 @@
-Title: Compiling Linux kernel for fun and profit
-Date: 2024-05-17 19:00
-Status: draft
-Category: random
-Tags: testing, linux
-Slug: compiling-linux-kernel
+---
+title: "Compiling Linux kernel for fun and profit"
+date: 2024-05-17T19:00:00
+draft: true
+tags:
+  - testing
+  - linux
+---
 
 Since almost the beginning of my Linux journey and up to around the year 2005, I used a custom kernel, both on my own computer and on the servers I managed. Why did I do that and why did I stop? 
 

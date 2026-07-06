@@ -1,9 +1,11 @@
-Title: Secret files in Git - transparent encryption and history rewriting
-Date: 2024-10-10 16:00
-Status: published
-Category: random
-Tags: it, cloud
-Slug: git-encrypt
+---
+title: "Secret files in Git - transparent encryption and history rewriting"
+date: 2024-10-10T16:00:00
+draft: false
+tags:
+  - it
+  - cloud
+---
 
 I accidentaly posted on GitHub some files I shouldn't: my input files from Advent of Code. I thought it doesn't matter since the files are generated for each player, but AoC author specifically prohibits this.
 

@@ -1,9 +1,12 @@
-Title: Reading Outlook emails with Python and O365
-Date: 2024-03-10 19:00
-Status: draft
-Category: random
-Tags: python, microsoft, authentication
-Slug: outlook-emails-python
+---
+title: "Reading Outlook emails with Python and O365"
+date: 2024-03-10T19:00:00
+draft: true
+tags:
+  - python
+  - microsoft
+  - authentication
+---
 
 Recently I needed to write a script that checks for new email and does something based on the contents. I tested it on a Gmail account with IMAP enabled, in a few hours I got a working code with some bells and whistles (retries with configurable delay, proper exception handling, built-in support for exporting Prometheus metrics).
 

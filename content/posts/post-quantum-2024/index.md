@@ -1,11 +1,10 @@
-Title: The state of post-quantum cryptography at the end of 2024
-Date: 2024-12-14 21:00
-Status: published
-Category: random
-Tags: security
-Slug: post-quantum-2024
-
-![Cloudflare Post-Quantum connection check]({static}/images/pqc-cloudflare.png)
+---
+title: "The state of post-quantum cryptography at the end of 2024"
+date: 2024-12-14T21:00:00
+draft: false
+tags:
+  - security
+---
 
 The recent hype about Google Willow inspired me to recheck what's happening in the world of post-quantum cryptography.
 
@@ -66,4 +65,4 @@ I checked a few recent Linux distro and none had a liboqs package. Why, if it's 
 - SSH server: connect with `-vv` option and check "peer server KEXINIT proposal" (as a bonus "local client KEXINIT proposal" will show what your client supports). Alternatively, `nmap --script ssh2-enum-algos -sV -p 22 your.ssh.host`. In any case, look for mlkem.
 - OpenSSL: `openssl list -kem-algorithms` and look for mlkem or kyber.
 
-![SSH client supporting FIPS203 (mlkem)]({static}/images/pqc-ssh.png)
+![SSH client supporting FIPS203 (mlkem)](pqc-ssh.png)
