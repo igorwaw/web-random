@@ -1,11 +1,13 @@
-Title: Secret files in Git - transparent encryption and history rewriting
-Date: 2024-10-10 16:00
-Status: published
-Category: random
-Tags: it, cloud
-Slug: git-encrypt
+---
+title: "Secret files in Git - transparent encryption and history rewriting"
+date: 2024-10-10T16:00:00
+draft: false
+tags:
+  - it
+  - cloud
+---
 
-I accidentaly posted on GitHub some files I shouldn't: my input files from Advent of Code. I thought it doesn't matter since the files are generated for each player, but AoC author specifically prohibits this.
+I accidentally posted on GitHub some files I shouldn't: my input files from Advent of Code. I thought it doesn't matter since the files are generated for each player, but AoC author specifically prohibits this.
 
 I don't think it's a big deal: few people visit my GitHub anyway. But let's solve it. I might need that skill one day for a more serious problem.
 
@@ -41,7 +43,7 @@ The whole set of commands looks like this:
  git pull # verification - no incoming changes
 ```
 
-A quick check on GitHub - the files are gone and there are no new commits, no traces of what just happened. This is scary stuff, a proper removal from history. Luckily, the real world history can't be so easilly rewritten (OR CAN IT?).
+A quick check on GitHub - the files are gone and there are no new commits, no traces of what just happened. This is scary stuff, a proper removal from history. Luckily, the real world history can't be so easily rewritten (OR CAN IT?).
 
 ## How to transparently encrypt files in the repo
 
@@ -96,11 +98,11 @@ git commit -m "encrypted inputs"
 git push
 ```
 
-Now, go to GitHub and see what was commited - the files will look like this: ` GITCRYPT r5”4Â)ùKåæÜ¿„ÚÊ¶`.
+Now, go to GitHub and see what was committed - the files will look like this: ` GITCRYPT r5”4Â)ùKåæÜ¿„ÚÊ¶`.
 
 ### Using the encrypted repo on another machine
 
-Copy the exported keyfile to another machine in a secure way (eg. using `sftp` or `rsync -e ssh`). Place the keyfile in any convenient place outside the repo (one directory level up is convenient), than run the command: `git-crypt unlock ../git-crypt-key`.
+Copy the exported keyfile to another machine in a secure way (eg. using `sftp` or `rsync -e ssh`). Place the keyfile in any convenient place outside the repo (one directory level up is convenient), then run the command: `git-crypt unlock ../git-crypt-key`.
 
 ### Reusing the encryption key
 

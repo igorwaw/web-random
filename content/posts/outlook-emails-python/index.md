@@ -1,13 +1,16 @@
-Title: Reading Outlook emails with Python and O365
-Date: 2024-03-10 19:00
-Status: draft
-Category: random
-Tags: python, microsoft, authentication
-Slug: outlook-emails-python
+---
+title: "Reading Outlook emails with Python and O365"
+date: 2024-03-10T19:00:00
+draft: true
+tags:
+  - python
+  - microsoft
+  - authentication
+---
 
 Recently I needed to write a script that checks for new email and does something based on the contents. I tested it on a Gmail account with IMAP enabled, in a few hours I got a working code with some bells and whistles (retries with configurable delay, proper exception handling, built-in support for exporting Prometheus metrics).
 
-But the company hosts their email on Microsoft servers. Easy, I'll just change the server hostname, right? Wrong! Microsoft disabled basic authentication (with username and password) for IMAP two years ago, I need to use OAauth2. OK, I used OAuth2 before, it's sometimes a pain but shouldn't take more than an hour, right? Wrong again! Microsoft's OAuth2 and Graph API turned out to be a nightmare.
+But the company hosts their email on Microsoft servers. Easy, I'll just change the server hostname, right? Wrong! Microsoft disabled basic authentication (with username and password) for IMAP two years ago, I need to use OAuth2. OK, I used OAuth2 before, it's sometimes a pain but shouldn't take more than an hour, right? Wrong again! Microsoft's OAuth2 and Graph API turned out to be a nightmare.
 
 It's not that it's not documented. On the contrary - there's a long documentation detailing 3 different authentication flows and countless permissions. It's probably good for security that it allows a very fine grained access control. But I just want to read emails without getting a PhD in Authentication Science.
 
@@ -71,7 +74,7 @@ def mslogin():
 
 The script will display a URL. You need to open it in a browser, login to your Microsoft account if you're not already logged in and approve access for the app. The browser will display another URL, which you now need to paste in the terminal.
 
-O365 library will then store the authentication token. Next time you run the script, `account.is_authenticated` will return True and you won't need to approve again. The token is valid for an hour, but it's automatically renewed each time you connect. My script will check email every few minutes, so it can stay approved indefinetely.
+O365 library will then store the authentication token. Next time you run the script, `account.is_authenticated` will return True and you won't need to approve again. The token is valid for an hour, but it's automatically renewed each time you connect. My script will check email every few minutes, so it can stay approved indefinitely.
 
 ## Reading new email
 

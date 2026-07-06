@@ -1,16 +1,18 @@
-Title: Compiling Linux kernel for fun and profit
-Date: 2024-05-17 19:00
-Status: draft
-Category: random
-Tags: testing, linux
-Slug: compiling-linux-kernel
+---
+title: "Compiling Linux kernel for fun and profit"
+date: 2024-05-17T19:00:00
+draft: true
+tags:
+  - testing
+  - linux
+---
 
 Since almost the beginning of my Linux journey and up to around the year 2005, I used a custom kernel, both on my own computer and on the servers I managed. Why did I do that and why did I stop? 
 
 
 | Why?      | Why not? |
 | ----------- | ----------- |
-| You can optimize your kernel for the specific CPU it will be running on.     |  In the early 2000s it had a noticable impact, not so much on today's CPUs. Plus, it only makes kernel code faster - how much your CPU spends on kernel code?      |
+| You can optimise your kernel for the specific CPU it will be running on.     |  In the early 2000s it had a noticeable impact, not so much on today's CPUs. Plus, it only makes kernel code faster - how much your CPU spends on kernel code?      |
 | You can make your kernel much smaller by disabling unneeded features, half of the standard size is not unusual. Kernel is always loaded into RAM, it can't be swapped out.   | When PCs typically had 4-16MB of RAM, the kernel was a sizable portion of it. Today, wasting a few MB is not a big deal. Plus, most things like hardware drivers or filesystems are built as modules, only loaded as needed, so you have to disable whole classes of hardware to see any impact.       |
 | You can add extra patches. Typically, I used to add security patches such as openwall or grsecurity, sometimes also hardware drivers. | The security patches I used to use were mostly absorbed by the mainline Linux kernel. And I haven't seen a driver distributed as a kernel source patch for years.  |
 | Disabling some kernel features reduces an attack surface and the amount of (possibly buggy) code running. | The more unneeded features you disable, the more likely you are to discover that they were, in fact, needed. You might think you don't need a certain feature, but the software you use might rely on it. You probably never explicitly used multicast or namespaces, but I bet your system uses them.   |
@@ -19,11 +21,11 @@ Since almost the beginning of my Linux journey and up to around the year 2005, I
 
 ## Why is kernel compiling still relevant today?
 
-One reason is education. You can really learn a lot about the inner working of your system just by looking at the kernel configuration options (not even the source code). In fact, I occasionaly do just the configuration step without actually compiling and using the custom kernel, which gives me 99% of education with 1% of the problems.
+One reason is education. You can really learn a lot about the inner working of your system just by looking at the kernel configuration options (not even the source code). In fact, I occasionally do just the configuration step without actually compiling and using the custom kernel, which gives me 99% of education with 1% of the problems.
 
 Another is to help with debugging. Unless you're actively working on kernel development, discovering a bug that shows up in your specific setup is unlikely. But not impossible. In my 25 years of working with Linux, it only happened once. When it happens and you decide to contact relevant developers, they might ask you to test with different kernel versions or do some quick modifications to see how they impact your problem.
 
-But the most likely reason is embedded hardware. All the arguments about CPU speed and RAM size are relevant again. On a router or a similar device that deals with IP stack and network drivers all the time, CPU spends most time running the kernel code, so any speedup of it is welcome. Plus, there's even no such thing as a univeral ARM kernel anyway. In a PC world, the same kernel can run on a pocket sized Intel Atom board and on a 512-core NUMA supercomputer node, but embedded hardware is even more varied than that.
+But the most likely reason is embedded hardware. All the arguments about CPU speed and RAM size are relevant again. On a router or a similar device that deals with IP stack and network drivers all the time, CPU spends most time running the kernel code, so any speedup of it is welcome. Plus, there's even no such thing as a universal ARM kernel anyway. In a PC world, the same kernel can run on a pocket sized Intel Atom board and on a 512-core NUMA supercomputer node, but embedded hardware is even more varied than that.
 
 ## How hard is that?
 
@@ -36,7 +38,7 @@ One caveat is Secure Boot. Most PCs have this feature enabled, meaning they will
 - grub loads kernel,
 - kernel loads modules.
 
-And you probably guessed: kernel and modules need to be signed as well, those provided by distribion already are and grub is configured to trust their signing key.
+And you probably guessed: kernel and modules need to be signed as well, those provided by distribution already are and grub is configured to trust their signing key.
 
 The "proper" way to deal with it is to generate a keypair, cryptographically sign your custom kernel and modules and configure grub to trust your key. Possible, but increases the difficulty of the whole process tenfold. The easy way, especially if you're just doing a quick test, is to disable Secure Boot.
 
@@ -59,7 +61,7 @@ This will first do a shallow clone (latest version only), then add 6 months wort
 
 Shallow clones are not recommended for long term work. If you try to add more versions, you'll probably see an error that something can't be unshallowed. Even commands like `git log` or `git blame` might fail or give strange results. If you're not a kernel developer and it's just a one-off task, it's probably OK and you just saved gigabytes of download. And if you are a kernel developer, you know it already.
 
-Whether you choose a tar.xz file or a git clone, download it your home directory, or any other place writable by your standard account. If you're as old as me, you might remember that Linux distros placed kernel sources in /usr/src/linux, but it's no longer recommended and hasn't been for years. The reason is you shouldn't use a root account for the compilation.
+Whether you choose a tar.xz file or a git clone, download it to your home directory, or any other place writable by your standard account. If you're as old as me, you might remember that Linux distros placed kernel sources in /usr/src/linux, but it's no longer recommended and hasn't been for years. The reason is you shouldn't use a root account for the compilation.
 
 ## Installing the tools
 
@@ -67,7 +69,7 @@ First approximation: you only need GNU make and the C compiler. But if you look 
 
 - I prefer to use Debian or Ubuntu, meaning I'm going to build a deb package, which requires at least dpkg-dev and realistically a few more tools. (Sidenote: if you're reading another guide and it mentions **kernel-package** or **make-kpkg** command, be warned that it's a bit outdated. Might be still useful though, just skip that part and read below about the current way of building packages)
 - You might need to get the code from git or install a patch.
-- Very likely you'll need compression libriaries.
+- Very likely you'll need compression libraries.
 - If you want to configure kernel with `make menuconfig` (my preferred way), you need header files for the NCurses library.
 - Depending on the exact configuration, some more tools or libraries might be needed.
 - Note that I didn't include any Rust tools here. Moving to Rust is a slow process, currently it's at an experimental stage, if you're new to kernel compilation, you shouldn't touch it.
@@ -88,10 +90,10 @@ The parameter means: remove the first directory from the file path. The conventi
 
 Here's where the paths diverge. Go to your kernel source directory and:
 
-- First, edit/create file *localversion*, add something like '-my1', this string will be appended to the kernel version. Not required, but makes it easy to differentiate between the kerneles, especially if you recompile the same version with a different config. Plus, if you're compiling the same kernel version as you're currently running, you want your custom kernel to have a different version string so you don't replace the running kernel by mistake (note, some people would test a kernel in a VM, I'm assuming you're running it directly on your main machine because YOLO).
-- If you want to use your current running kernel as a starting point, do `cp /boot/config-$(uname -r) .config`, if you want to use the defaults from kernel.org as a starting point, skip this step. Note that if you're new kernel is close to the kernel you're already using, it's more likely to work properly.
+- First, edit/create file *localversion*, add something like '-my1', this string will be appended to the kernel version. Not required, but makes it easy to differentiate between the kernels, especially if you recompile the same version with a different config. Plus, if you're compiling the same kernel version as you're currently running, you want your custom kernel to have a different version string so you don't replace the running kernel by mistake (note, some people would test a kernel in a VM, I'm assuming you're running it directly on your main machine because YOLO).
+- If you want to use your current running kernel as a starting point, do `cp /boot/config-$(uname -r) .config`, if you want to use the defaults from kernel.org as a starting point, skip this step. Note that if your new kernel is close to the kernel you're already using, it's more likely to work properly.
 - If you copied the running kernel config but are now compiling a different (newer) version, you can now run `make oldconfig`, this will ask you how to configure new features but skip all those already present in the config file - which usually means just a few questions.
-- Another possible option is `make localmodconfig`. It will only enable the modules that are currently loaded, greatly decreasing the kernel package size and the build time. But it will also mean you might be missing a driver for a device you sometimes connect, just not at the point when you ran this command; or a network feature that weren't used since the last reboot but will be needed tomorrow. Dangerous if you're really want to use this kernel, probably OK for a quick test.
+- Another possible option is `make localmodconfig`. It will only enable the modules that are currently loaded, greatly decreasing the kernel package size and the build time. But it will also mean you might be missing a driver for a device you sometimes connect, just not at the point when you ran this command; or a network feature that weren't used since the last reboot but will be needed tomorrow. Dangerous if you really want to use this kernel, probably OK for a quick test.
 - Finally, if you want to see all configuration options - either because you want to properly customize your kernel, or you just want to have look - run `make menuconfig` for ncurses (text-mode GUI) interface. There are other interfaces (xconfig for qt, gconfig for gtk or config for the simple text-mode questions) but I find this one the most comfortable.
 
 Note that in every configuration interface you will have the possibility to read help. It provides useful information, which often ends with "If unsure, say Y". You should be careful with the recommendations, especially if they recommend to say N, as they are often very outdated. For example, it recommends to disable Symmetric Multi-Processing, while vast majority of CPUs today are multicore; it says you probably don't need Control Groups, but they are heavily used by systemd.
