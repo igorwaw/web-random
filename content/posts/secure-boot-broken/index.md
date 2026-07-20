@@ -29,17 +29,21 @@ Secure Boot only makes sense if it protects the whole boot process, from UEFI up
 - **Windows:** bootmgfw.efi (Windows Boot Manager), winload.efi (Windows Loader), ntoskrnl.exe (Windows kernel), drivers
 - **Linux:** grubx64.efi (GRand Unified Bootloader), vmlinuz (Linux kernel), drivers (kernel modules)
 
-Problem 1: countless number of Linux kernels. There are numerous distributions, each shipping several kernel versions at a time and then updates every week or two. Plus, users can build their own kernels. Plus software other than Linux and Windows (operating systems or low-level utilities).
+#### Staged verification
 
-Problem 2: even higher number of drivers.
+**Problem 1:** countless number of Linux kernels. There are numerous distributions, each shipping several kernel versions at a time and then updates every week or two. Plus, users can build their own kernels. Plus software other than Linux and Windows (operating systems or low-level utilities).
 
-There's no way Microsoft can sign all the trusted code. They can sign their own bootloader and kernels, but not the drivers; they can't sign all possible Linux kernels and, for whatever reason, decided that Linux should work with Secure Boot enabled.
+**Problem 2:** even higher number of drivers on Windows.
 
-So the cryptographic check comes in stages. The part that's embedded in UEFI checks the integrity of the Windows bootloader directly. In cases of Linux, it only verifies **shim** - a small piece of software provided and signed by Microsoft whose only job is to verify the non-Microsoft next stage: usually GRUB (or a few other things: fwupd EFI update tool, FreeBSD loader, there are also ways to boot a Linux kernel without grub, but for simplicity let's stay with the usual choice). Then, GRUB verifies the Linux kernel - it has a distro-provided key, or user's custom key for those few people that still compile their own kernel.
+There's no way Microsoft can sign all the trusted code. They can sign their own bootloader and kernels, but not the drivers. They can't sign all possible Linux kernels and, for whatever reason, decided that Linux should work with Secure Boot enabled.
+
+So the cryptographic check comes in stages. The part that's embedded in UEFI checks the integrity of the Windows Boot Manager directly, the Boot Manager then verifies the Windows Loader, which in turn verifies the Windows kernel.
+
+When the computer boots Linux, UEFI only verifies **shim** - a small piece of software provided and signed by Microsoft whose only job is to verify the non-Microsoft next stage: usually GRUB (or a few other things: fwupd EFI update tool, FreeBSD loader, there are also ways to boot a Linux kernel without grub, but for simplicity let's stay with the usual choice). Then, GRUB verifies the Linux kernel - it has a distro-provided key, or user's custom key for those few people that still compile their own kernel.
 
 #### Driver verification
 
-Finally, OS kernel verifies the drivers. Windows had this mechanism even before the Secure Boot was introduced (warnings since Windows 2000, mandatory verification and various enhancements since then). For good reason: drivers had long been a vulnerable point. Driver runs in kernel space, with highest possible privileges (unrestricted access to RAM and devices). On Linux, most drivers come with the kernel, from one trusted source, but on Windows they're mostly provided by hardware vendors.
+Finally, the OS kernel verifies the drivers. Windows had this mechanism even before Secure Boot was introduced (warnings since Windows 2000, mandatory verification and various enhancements since then). For good reason: drivers had long been a vulnerable point. Drivers run in kernel space, with the highest possible privileges (unrestricted access to RAM and devices). On Linux, most drivers come with the kernel, from one trusted source, but on Windows they're mostly provided by hardware vendors.
 
 Linux got the mechanism for kernel module verification in 2012, and later it was tied to Secure Boot. Currently, that boils down to two kernel options: *CONFIG_MODULE_SIG* means that kernel can verify signatures (but wouldn't necessarily reject them) and *CONFIG_LOCK_DOWN_IN_EFI_SECURE_BOOT* means that if the kernel was started with Secure Boot, it will refuse to load unverified drivers. Both are enabled in all mainline Linux distros.
 
@@ -51,7 +55,7 @@ If you have custom kernel or modules, you need to sign them with your own key an
 
 ### Problem with Secure Boot
 
-Given the distributed nature of the trust system, involving Microsoft, hardware vendors, Linux distributions and a few other entities, you might be wondering if it's possible to keep it vulnerability-free? Of course it isn't! Here are just a few examples of best-known exploits:
+Given the distributed nature of the trust system, involving Microsoft, hardware vendors (and firmware is notoriously buggy), Linux distributions and a few other entities, you might be wondering if it's possible to keep it vulnerability-free? Of course it isn't! Here are just a few examples of best-known exploits:
 
 
 | Date | CVSS score | Platform | URL |

@@ -7,7 +7,7 @@ tags:
   - cloud
 ---
 
-I accidentally posted on GitHub some files I shouldn't: my input files from Advent of Code. I thought it doesn't matter since the files are generated for each player, but AoC author specifically prohibits this.
+I accidentally posted on GitHub some files I shouldn't: my input files from Advent of Code. I thought it doesn't matter since the files are generated for each player, but the AoC author specifically prohibits this.
 
 I don't think it's a big deal: few people visit my GitHub anyway. But let's solve it. I might need that skill one day for a more serious problem.
 
@@ -64,7 +64,7 @@ git-crypt init
 git-crypt export-key ../git-crypt-key
 ```
 
-Next, create a file `.gitattributes`. It's similar to well-known .gitignore, but informs git to use other transformations than simply ignoring the file. For this case, I needed the following content:
+Next, create a file `.gitattributes`. It's similar to the well-known .gitignore, but informs git to use other transformations than simply ignoring the file. For this case, I needed the following content:
 
 ```bash
  day*/*-input.txt filter=git-crypt diff=git-crypt
@@ -93,7 +93,7 @@ Of course I had to put the input files back. Then, `git-crypt status -e` shows w
 You can encrypt them with `git-crypt lock`, but there's no need. Simply add the new files, commit them and push to the remote repo:
 
 ```bash
-git add .gitattributes day*/*input.txt
+git add .gitattributes day*/*-input.txt
 git commit -m "encrypted inputs"
 git push
 ```
@@ -113,4 +113,4 @@ cd ../advent15
 git-crypt unlock ../git-crypt-key
 ```
 
-There's nothing to unlock yet, but the command also initializes the hidden git-crypt files if they don't exist, only it doesn't create the new keyfile. Confusing, yes. Then, create the `.gitattributes`, add, commit and push files exactly the same way as in the previous repo.
+There's nothing to unlock yet, but the command also initializes the hidden git-crypt files if they don't exist, only it doesn't create a new keyfile. Confusing, yes. Then, create the `.gitattributes`, add, commit and push files exactly the same way as in the previous repo.

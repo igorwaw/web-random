@@ -21,7 +21,7 @@ It's getting a bit tricky if you need to test a distributed system:
 - you should probably configure a private network,
 - if you need port forwarding (eg. for SSH access), you need to use a different port for each VM.
 
-I configured one client and three servers, sr1, sr2 and sr3. Servers both have extra hard drives in addition to the standard system drive. All machines have 2GB of RAM and 2 vCPUs (except the first server which needs more power), all connect to the same private network. All use the same operating system. Spectrum Scale supports several versions of RHEL, Ubuntu and SLES, it should work with other distributions, but no guarantees, and you'd be forced to use manual installation.
+I configured one client and three servers, sr1, sr2 and sr3. Servers all have extra hard drives in addition to the standard system drive. All machines have 2GB of RAM and 2 vCPUs (except the first server which needs more power), all connect to the same private network. All use the same operating system. Spectrum Scale supports several versions of RHEL, Ubuntu and SLES, it should work with other distributions, but no guarantees, and you'd be forced to use manual installation.
 
 Here is my Vagrantfile. It's not the initial version, that's where I arrived after some experiments.
 
@@ -104,9 +104,9 @@ Vagrantfile references another file, boot-tasks.sh, which needs to be in the sam
 
 ## Preventing installation errors
 
-If you're running the VMs on your own computer, you might be tempted to give them less resources. Unfortunately, GPFS is a memory hog. Just the main daemon gpfsd consumes 1.2GB of RAM at startup. You need at least 2GB of RAM on all nodes, I also recommend to assign 4GB to one of the nodes and use it for running GUI and installer. That means that for 3 servers and client you need at least 10GB - a bit tough if your computer only has 16GB. But if your nodes don't have enough memory, daemons will fail to start or crash, what's worse, they might not even show any meaningful error message.
+If you're running the VMs on your own computer, you might be tempted to give them less resources. Unfortunately, GPFS is a memory hog. Just the main daemon mmfsd consumes 1.2GB of RAM at startup. You need at least 2GB of RAM on all nodes, I also recommend assigning 4GB to one of the nodes and use it for running GUI and installer. That means that for 3 servers and a client you need at least 10GB - a bit tough if your computer only has 16GB. But if your nodes don't have enough memory, daemons will fail to start or crash, what's worse, they might not even show any meaningful error message.
 
-I also had problems, quite ironically, with storage performance. I'm running several VMs out of one hard drive (not even SSD). Linux block layer by default timeouts if it can't finish a disk operation in 30 seconds. A reasonable value for a physical system, but if several VMs are doing write-heavy operations, it might not be enough. I'd rather wait a bit more than risk data corruption. I prepared a script `time.sh` and put it in the same directory as Vagrantfile. I configured Vagrant to run it automatically while rebuilding the VMs, I can also run it manually if I need to change the value.
+I also had problems, quite ironically, with storage performance. I'm running several VMs out of one hard drive (not even SSD). Linux block layer by default times out if it can't finish a disk operation in 30 seconds. A reasonable value for a physical system, but if several VMs are doing write-heavy operations, it might not be enough. I'd rather wait a bit more than risk data corruption. I prepared a script `time.sh` and put it in the same directory as Vagrantfile. I configured Vagrant to run it automatically while rebuilding the VMs, I can also run it manually if I need to change the value.
 
 ```bash
 #!/bin/bash
@@ -131,7 +131,7 @@ It will list a few installation options. First one is:
       /usr/lpp/mmfs/5.1.9.0/ansible-toolkit/spectrumscale -h
 ```
 
-Ansible? Now you've got my attention! Last time I created GPFS testbed I installed the packages manually, but I like this option more. Let's read the documentation for the IBM Storage Scale Installation Toolkit.
+Ansible? Now you've got my attention! Last time I created a GPFS testbed I installed the packages manually, but I like this option more. Let's read the documentation for the IBM Storage Scale Installation Toolkit.
 
 The guide lists some requirements:
 
@@ -160,7 +160,7 @@ cp /etc/hosts /vagrant
 cp ~vagrant/.ssh/id_rsa* /vagrant
 ```
 
-Next, we'll add a script so Vagrant will automatically configure all VMs. It will set the ssh keys, install required packages, and remove unattended-upgrades (this daemon has a habit of getting in the way of package installation). In the same directory where you placed Vagrantfile, add file boot-tasks.sh with the following contents:
+Next, we'll add a script so Vagrant will automatically configure all VMs. It will set the ssh keys, install required packages, and remove unattended-upgrades (this daemon has a habit of getting in the way of package installation). In the same directory where you placed Vagrantfile, add a file boot-tasks.sh with the following contents:
 
 ```bash
 #!/bin/sh
@@ -184,14 +184,14 @@ Restart machines with `vagrant reload`. Then try to ssh from root@sr1 to all VMs
 
 ## Installing Storage Scale
 
-First thing is to prepare the installer node. All commands below require root privileges:
+The first thing is to prepare the installer node. All commands below require root privileges:
 
 ```bash
 cd /usr/lpp/mmfs/5.1.9.0/ansible-toolkit
 ./spectrumscale setup -s 192.168.56.101
 ```
 
-First server will have a GUI and an admin role (`-a -g`). All servers will have a manager role, NSD role and will form quorum (`-m -n -q`) . Client is a node without any role (no extra arguments).
+The first server will have a GUI and an admin role (`-a -g`). All servers will have a manager role, NSD role and will form quorum (`-m -n -q`). Client is a node without any role (no extra arguments).
 
 ```bash
 ./spectrumscale node add sr1 -m -q -n -a -g 
@@ -219,8 +219,8 @@ Now, check the filesystem configuration:
 ![Filesystem configuration](gpfs-fs.png)
 
 
-Last thing to configure. By default, Spectrum Scale will send information to IBM, but this function is not configured. We need to either provide information about the customer, country etc. or simply turn it off with  `./spectrumscale callhome disable`.
+The last thing to configure. By default, Spectrum Scale will send information to IBM, but this function is not configured. We need to either provide information about the customer, country etc. or simply turn it off with  `./spectrumscale callhome disable`.
 
-We've got nodes, disks and filesystem, ready for deployment. But first, let's save VM snapshots in case we mess up something and need to revert, by running this command on the host: `vagrant snapshot save before-installation`.
+We've got nodes, disks and a filesystem, ready for deployment. But first, let's save VM snapshots in case we mess up something and need to revert, by running this command on the host: `vagrant snapshot save before-installation`.
 
 Finally, run `./spectrumscale install`. If all goes well, you might go for lunch at this point as the whole process will take at least 30 minutes. More likely, it will fail at some point. IBM Storage Scale Installation Toolkit runs some pre-checks and creates a temporary repo during installation, unfortunately it needs to repeat it during every attempt and it takes (on my slow inadequate hardware) about 10 minutes. Very annoying. Further tasks are more Ansible-style: if something fails, fix the problem and run the installer again, tasks already done will be checked and skipped, failed tasks will be attempted again.
