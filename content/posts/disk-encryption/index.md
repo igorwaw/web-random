@@ -39,6 +39,9 @@ BitLocker encrypts the whole system volume (and optionally other volumes) with A
 
 Management is done through the control panel, or from the command line with `manage-bde` (e.g. `manage-bde -status`).
 
+![BitLocker on the command line](bitlocker-cli.png)
+
+
 ### TPM-only mode: convenient, but less secure
 
 TPM-only mode is the default and it's great for usability: there's no need for an extra password. You log in the usual way, with a PIN or fingerprint. Until you check in the control panel, you don't even notice that the drive is encrypted.
@@ -79,6 +82,22 @@ My personal preference for the laptop: **/boot on a separate unencrypted filesys
 
 Incidentally, Ubuntu 26.10 which has just shipped [does NOT support encrypted /boot if Secure Boot is enabled](https://ubuntu.com/blog/ubuntu-26-10-security). This sounds counterintuitive, but it's a part of an effort to reduce the amount of code that runs on the highest trust level. The secure version of GRUB is limited in many other ways - it doesn't support ZFS and btrfs, doesn't display images. Just barely enough to boot and let the kernel handle the rest. Standard GRUB is quite complex, it's almost a separate operating system, so slimming it down is a step in the right direction. Trade-offs everywhere.
 
+### Managing LUKS
+
+It's much easier to encrypt the hard drive during the installation. You can't encrypt (or decrypt) a live system. You need at least a brief downtime: boot from a USB drive, shrink the filesystem to make space for the LUKS header (alternatively - you can use a detached header in a separate file) and configure the filesystem for encryption. You can then reboot before it's fully encrypted, the encryption will continue after the reboot. It's not THAT hard (just a few simple commands), but hard enough to discourage most people from trying. Perhaps one day LUKS will get a fully live option similar to BitLocker (at least for the most common scenarios - given many possible combinations in the Linux block device layers, there won't be a way to cover all of them).
+
+However, standard operations on the encrypted drive are simple.
+
+- Generally, it just works. You need to enter the password at every boot, but it will never surprise you with an unexpected prompt.
+- Changing the password is `sudo cryptsetup luksChangeKey /dev/sda3` (replace sda3 with your device name).
+- Displaying the information is `sudo cryptsetup luksDump /dev/sda3`.
+- LUKS has many key slots (8 in LUKS1, 32 in LUKS2) that all unlock the same device. Useful if several admins need access to the same server. Or to have a similar setup to what BitLocker does: main (non-password) method + recovery key. I covered it on my selfhosting blog when describing [encryption options for a server](https://selfhosting.too-many-machines.com/home/nas-2/).
+
+There are also LUKS GUIs provided by Gnome, KDE and others, but I never use them. I don't use GUI on my servers, and on my laptop it's more convenient for me to do it the same way.
+
+![LUKS setup in the GUI](luks-gui.png)
+
+
 ### TPM-backed unlocking
 
 Linux can also use the TPM, like BitLocker does. The tools are systemd-cryptenroll or Clevis. The key gets sealed to selected PCRs (TPM registers holding measurements of firmware, bootloader, Secure Boot state, kernel etc.) and the disk unlocks automatically if they match. Optionally, with a PIN.
@@ -96,7 +115,7 @@ And even on Ubuntu, I'm still not convinced. Even though I happily run experimen
 
 ### Other ways
 
-In LUKS, you can use a file as an encryption key. Of course, the file needs to be stored on another filesystem. You can also get the key from a network server. I covered it on my selfhosting blog when describing [encryption options for a server](https://selfhosting.too-many-machines.com/home/nas-2/). I decided not to use them on my NAS, for a laptop they seem even less practical.
+In LUKS, you can use a file as an encryption key. Of course, the file needs to be stored on another filesystem. You can also get the key from a network server. None of these seem practical for a laptop.
 
 ## macOS: FileVault
 
@@ -120,7 +139,7 @@ Disk encryption isn't free. Here's what you pay:
 - **Unattended reboots.** A computer that asks for a passphrase at boot can't restart automatically. Not an issue for a laptop, a real issue for servers.
 - **Performance.** On modern CPUs with AES acceleration, the impact is so low it's hard to measure. On very old or low-power hardware (some ARM boards), it can be noticeable. 
 - **It only protects a computer that's turned off.** Once the disk is unlocked, encryption does nothing against malware or someone who grabs the running laptop. A laptop in sleep mode keeps the keys in RAM. If you're worried, shut it down before leaving it unattended or crossing a border.
-- **False sense of security.** A proper encryption is unbreakable, but it doesn't help at all if someone can get your unencrypted backups or force you to unlock the computer.
+- **False sense of security.** Proper encryption is unbreakable, but it doesn't help at all if someone can get your unencrypted backups or force you to unlock the computer.
 
 I think the first point is the only one that matters - not for me, but for non-technical people. All the others are a really small price compared to the alternative. I've seen what the alternative would look like - and the only reason I didn't have to deal with it was that I forced everyone to encrypt and accepted no complaints.
 
@@ -130,6 +149,6 @@ Option 1: get them a Mac. Check that FileVault is enabled.
 
 Option 2: install Linux with password-protected LUKS. They'll need 2 passwords at every boot. You won't ever have to deal with any problems related to encryption. Just countless support requests about everything else.
 
-Option 3: configure Windows with standard, TPM-only encryption, no PIN. Check the key was backed up to their Microsoft account, because it sometimes fail. Print the recovery key twice, tell them to store one copy securely, keep the other one. Explain that one day the system might ask them for the key, it doesn't mean it's broken. Show them an example screen. Tell them to call you if that happens.
+Option 3: configure Windows with standard, TPM-only encryption, no PIN. Check the key was backed up to their Microsoft account, because it sometimes fails. Print the recovery key twice, tell them to store one copy securely, keep the other one. Explain that one day the system might ask them for the key, it doesn't mean it's broken. Show them an example screen. Tell them to call you if that happens.
 
 Great, I guess I accidentally wrote a pro-Apple post.

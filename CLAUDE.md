@@ -11,11 +11,12 @@ Personal blog (Hugo static site, theme `hugo-theme-stack`) about the IT-related 
   title: "..."
   date: 2026-07-07T00:00:00
   draft: true
-  tags: ["tag-one"]
+  tags:
+    - tag-one
   ---
   ```
   - **New posts must be created with `draft: true`.** The user flips it to `false` themselves when ready to publish - never set `draft: false` when scaffolding a new post.
-  - `tags` uses the inline array style shown above, not YAML block-list style.
+  - `tags` uses the YAML block-list style shown above, not the inline array style.
   - `date` should be a safely past timestamp on the day it's written - Hugo excludes future-dated content from the build by default, which silently drops the page.
 - First (by alphabetical order) image in the page bundle becomes the banner/featured image, no need for explicit `image: filename.png` and skip linking to it in the article.
 
