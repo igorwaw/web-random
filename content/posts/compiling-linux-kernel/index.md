@@ -1,7 +1,7 @@
 ---
 title: "Compiling Linux kernel for fun and profit"
-date: 2026-10-30T17:00:00
-draft: true
+date: 2026-11-19T17:00:00
+draft: false
 tags:
   - testing
   - linux
